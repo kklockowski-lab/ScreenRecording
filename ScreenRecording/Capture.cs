@@ -13,6 +13,7 @@ namespace ScreenRecording
 {
     // To jest nie mój kod. Skopiowno ze strony:
     //https://stackoverflow.com/questions/44072489/how-to-save-record-video-in-sharpavi
+    // I zmodyfikowany pod swoje potrzeby.
     // Used to Configure the Recorder
     public class RecorderParams
     {
