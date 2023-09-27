@@ -1,0 +1,55 @@
+# Ignorowanie plików konfiguracyjnych Visual Studio
+.vs
+bin/
+obj/
+
+# Ignorowanie plików konfiguracyjnych ReSharper
+_ReSharper.*
+
+# Ignorowanie plików wynikowych i tymczasowych
+*.exe
+*.dll
+*.pdb
+*.user
+*.suo
+*.cache
+*.log
+*.vscode
+*.vssettings
+
+# Ignorowanie katalogu publish (jeśli korzystasz z Publish do wdrożenia aplikacji)
+publish/
+
+# Ignorowanie katalogu NuGet
+packages/
+
+# Ignorowanie plików dołączonych do projektu
+*.csproj.user
+*.resx
+*.sln.docstates
+*.suo
+*.userprefs
+*.vscode
+*.vssscc
+*.vspscc
+*.vshost.*
+
+# Ignorowanie plików dołączonych do projektu typu klasycznych plików projektowych
+*.[Pp]ublish.xml
+*.publishproj
+*.pubxml
+*.user
+*.cache
+*.bak
+
+# Ignorowanie plików wygenerowanych przez różne narzędzia
+[Tt]humbs.db
+[Tt]estResults
+*.OpenCover
+*.DotCover
+*.vsmdi
+TestResults
+
+# Ignorowanie katalogu projektów git
+.git/
+/DataBase/credit — kopia (2).sqlite
