@@ -28,12 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            btnStartRec = new Button();
+            btnStopRec = new Button();
+            SuspendLayout();
+            // 
+            // btnStartRec
+            // 
+            btnStartRec.Location = new Point(50, 320);
+            btnStartRec.Name = "btnStartRec";
+            btnStartRec.Size = new Size(75, 23);
+            btnStartRec.TabIndex = 0;
+            btnStartRec.Text = "Start";
+            btnStartRec.UseVisualStyleBackColor = true;
+            btnStartRec.Click += btnStartRec_Click;
+            // 
+            // btnStopRec
+            // 
+            btnStopRec.Location = new Point(182, 320);
+            btnStopRec.Name = "btnStopRec";
+            btnStopRec.Size = new Size(75, 23);
+            btnStopRec.TabIndex = 1;
+            btnStopRec.Text = "Stop";
+            btnStopRec.UseVisualStyleBackColor = true;
+            btnStopRec.Click += btnStopRec_Click;
+            // 
+            // Main
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnStopRec);
+            Controls.Add(btnStartRec);
+            Name = "Main";
+            Text = "Form1";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button btnStartRec;
+        private Button btnStopRec;
     }
 }
