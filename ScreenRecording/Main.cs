@@ -1,10 +1,5 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
-using SharpAvi;
-using SharpAvi.Codecs;
-using SharpAvi.Output;
-using System.Threading;
+using System.Diagnostics;
 using NAudio.Wave;
 
 namespace ScreenRecording
@@ -12,82 +7,77 @@ namespace ScreenRecording
 
     public partial class Main : Form
     {
-        private AviWriter writer;
-        private IAviVideoStream videoStream;
-        private IAviAudioStream audioStream;
 
-        private WaveInEvent waveIn;
-
-
-        private WaveFileWriter waveWriter;
+        private const string FfmpegPath = "ffmpeg.exe"; // Podaj pe³n¹ œcie¿kê do pliku ffmpeg.exe
+        private const string otupAviResult = "output\\result.avi"; // Œcie¿ka do pliku wynikowego
+        private const string otupWavResult = "output\\result.wav"; // Œcie¿ka do pliku wynikowego
 
         public Main()
         {
             InitializeComponent();
         }
+        private WaveInEvent waveSource;
+        private WaveFileWriter waveFile;
 
-        private void StartRecording()
+        public void StartRecording(string filePath)
         {
-            writer = new AviWriter("recorded.avi")
-            {
-                FramesPerSecond = 30,
-                EmitIndex1 = true
-            };
+            waveSource = new WaveInEvent();
+            waveSource.WaveFormat = new WaveFormat(44100, 1); // Ustawienia formatu audio (44100 Hz, mono)
 
+            waveFile = new WaveFileWriter(filePath, waveSource.WaveFormat);
 
+            waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
+            waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
+
+            waveSource.StartRecording();
         }
 
-        private void StopRecording()
+        private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            writer.Close();
+            waveFile.Write(e.Buffer, 0, e.BytesRecorded);
+            waveFile.Flush();
         }
 
+        private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            waveSource.Dispose();
+            waveFile.Dispose();
+        }
+
+        public void StopRecording()
+        {
+            waveSource.StopRecording();
+        }
+
+        Process process;
         private void btnStartRec_Click(object sender, EventArgs e)
         {
-            //  writer = new AviWriter("recorded.avi")
-            //  {
-            //      FramesPerSecond = 30,
-            //      EmitIndex1 = true
-            //  };
 
-            //  //videoStream = writer.AddVideoStream(width: Screen.PrimaryScreen.Bounds.Width,
-            //  //                                    height: Screen.PrimaryScreen.Bounds.Height,
-            //  //                                        bitsPerPixel: BitsPerPixel.Bpp32);
+            process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "ffmpeg",
+                    Arguments = $"-f gdigrab -framerate 30 -i desktop {otupAviResult}",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = false,
+                    RedirectStandardError = false
+                }
+            };
 
-            //  var waveFormat = new WaveFormat(44100, 16, 1); // Ustawienia formatu dŸwiêku (44.1 kHz, 16-bit, mono)
-            //  audioStream = writer.AddAudioStream();
+            process.Start();
+            StartRecording(otupWavResult);
 
-            //  waveIn = new WaveInEvent();
-            //  waveIn.WaveFormat = waveFormat;
-            //  waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            //  waveIn.StartRecording();
-
-            ////  writer.Open();
-            ///
-            waveIn = new WaveInEvent();
-            waveIn.WaveFormat = new WaveFormat(44100, 16, 1); // Ustawienia formatu dŸwiêku (44.1 kHz, 16-bit, mono)
-            waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-
-            waveWriter = new WaveFileWriter("recordedAudio.wav", waveIn.WaveFormat);
-
-            waveIn.StartRecording();
         }
-        private void waveIn_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            // audioStream.WriteBlock(e.Buffer, 0, e.BytesRecorded);
 
-            waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
-        }
 
         private void btnStopRec_Click(object sender, EventArgs e)
         {
-            //waveIn.StopRecording();
-            //waveIn.DataAvailable -= new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            //writer.Close();
+            StopRecording();
+            process.Kill();
+            process.WaitForExit();
 
-            waveIn.StopRecording();
-            waveIn.DataAvailable -= new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            waveWriter.Close();
         }
     }
 }

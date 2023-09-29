@@ -30,6 +30,7 @@
         {
             btnStartRec = new Button();
             btnStopRec = new Button();
+            richTextBox1 = new RichTextBox();
             SuspendLayout();
             // 
             // btnStartRec
@@ -52,11 +53,20 @@
             btnStopRec.UseVisualStyleBackColor = true;
             btnStopRec.Click += btnStopRec_Click;
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(106, 30);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(429, 191);
+            richTextBox1.TabIndex = 2;
+            richTextBox1.Text = "";
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(richTextBox1);
             Controls.Add(btnStopRec);
             Controls.Add(btnStartRec);
             Name = "Main";
@@ -68,5 +78,6 @@
 
         private Button btnStartRec;
         private Button btnStopRec;
+        private RichTextBox richTextBox1;
     }
 }
