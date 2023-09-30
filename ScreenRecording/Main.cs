@@ -8,12 +8,20 @@ namespace ScreenRecording
     public partial class Main : Form
     {
 
-        Recording recording;
+        static Recording recording;
         private static IKeyboardMouseEvents m_GlobalHook;
 
-        Thread thr = new Thread(new ThreadStart(startMouse));
+        Thread thr = new Thread(new ThreadStart(startRecording));
 
-        private static void startMouse()
+        static object syncObj = new object();
+
+        private static void startRecording()
+        {
+            recording = new Recording();
+            recording.Start();
+        }
+
+        private void startMouse()
         {
             m_GlobalHook = Hook.GlobalEvents();
 
@@ -22,7 +30,7 @@ namespace ScreenRecording
                 if (e.Button == MouseButtons.Left)
                 {
                     Point clickedPoint = new Point(e.X, e.Y);
-                    Marker.DrawMarker(clickedPoint, 50);
+                    Marker.DrawMarker(clickedPoint, 30);
                 }
             };
         }
@@ -36,20 +44,19 @@ namespace ScreenRecording
         }
 
 
-
-
         private void btnStartRec_Click(object sender, EventArgs e)
         {
-            recording = new Recording();
-            recording.Start();
-
-            WindowHooker.StartHook();
+            thr.Start();
         }
 
 
         private void btnStopRec_Click(object sender, EventArgs e)
         {
-            recording.Stop();
+            lock (syncObj)
+            {
+                recording.Stop();
+            }
+            thr.Abort();
             m_GlobalHook?.Dispose();
         }
 

@@ -82,7 +82,7 @@ namespace RecordingScreen
                 }
             };
             process.StartInfo.RedirectStandardInput = true;
-            process.Start();
+            //process.Start();
             StartRecording(otupWavResult);
         }
 
@@ -126,7 +126,7 @@ namespace RecordingScreen
                 }
             }
 
-            JoinWavAndAvi();
+            //JoinWavAndAvi();
         }
 
         public void KillFFMpegProcess()
