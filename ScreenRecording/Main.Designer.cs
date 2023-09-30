@@ -83,6 +83,7 @@
             Controls.Add(btnStartRec);
             Name = "Main";
             Text = "Form1";
+            FormClosing += Main_FormClosing;
             ResumeLayout(false);
         }
 
